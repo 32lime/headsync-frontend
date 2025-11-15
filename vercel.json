@@ -1,5 +1,5 @@
 {
-  "buildCommand": "cd frontend && npm run web",
+  "buildCommand": "cd frontend && CI=true npm run build",
   "outputDirectory": "frontend/dist",
   "devCommand": "cd frontend && npm run web",
   "installCommand": "cd frontend && npm install",
@@ -11,4 +11,3 @@
     }
   ]
 }
-
