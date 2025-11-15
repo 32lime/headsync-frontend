@@ -57,27 +57,26 @@ export default function ReportScreen() {
 
   const intensityLevels = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
-  // Fetch migraine history
+  // Fetch migraine history - hardcoded response
   const fetchMigraineHistory = async (userId: string = '1') => {
     try {
       setLoadingHistory(true);
-      const response = await fetch(`${API_BASE_URL}/migraine-history/${userId}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': DEV_TOKEN,
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error(`API error: ${response.status}`);
-      }
-
-      const data = await response.json();
+      // Simulate API delay
+      await new Promise(resolve => setTimeout(resolve, 300));
       
-      if (data.success && data.migraine_dates) {
-        setMigraineDates(data.migraine_dates);
+      // Hardcoded response - return some sample dates from the past month
+      const today = new Date();
+      const sampleDates: string[] = [];
+      
+      // Add a few sample dates from the past 30 days
+      for (let i = 0; i < 5; i++) {
+        const date = new Date(today);
+        date.setDate(today.getDate() - (i * 7 + Math.floor(Math.random() * 3)));
+        const dateStr = date.toISOString().split('T')[0];
+        sampleDates.push(dateStr);
       }
+      
+      setMigraineDates(sampleDates);
     } catch (error) {
       console.error('Error fetching migraine history:', error);
       // Set empty array on error
@@ -185,25 +184,15 @@ export default function ReportScreen() {
 
       console.log('[handleSubmit] Sending report data:', reportData);
 
-      // Call the real API endpoint
-      const response = await fetch(`${API_BASE_URL}/submit-report`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': DEV_TOKEN, // Use Authorization header
-        },
-        body: JSON.stringify(reportData),
-      });
+      // Simulate API delay
+      await new Promise(resolve => setTimeout(resolve, 500));
 
-      console.log('[handleSubmit] Response status:', response.status);
-
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.error('[handleSubmit] API error response:', errorText);
-        throw new Error(`API error: ${response.status} ${response.statusText} - ${errorText}`);
-      }
-
-      const result = await response.json();
+      // Hardcoded success response
+      const result = {
+        success: true,
+        message: 'Report submitted successfully',
+        report_id: Date.now().toString(),
+      };
       console.log('[handleSubmit] Success response:', result);
 
       // Blur any focused elements to prevent accessibility issues

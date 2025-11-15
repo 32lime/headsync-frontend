@@ -47,62 +47,33 @@ const getMessageFromPercentage = (percentage: number): string => {
   }
 };
 
-// Fetch migraine risk from backend API
+// Fetch migraine risk - hardcoded response
 const fetchMigraineRisk = async (userId: string = '1'): Promise<{
   riskLevel: 'low' | 'medium' | 'high';
   riskPercentage: number;
   factors: string[];
   message: string;
+  reason1?: string | null;
+  reason2?: string | null;
 }> => {
   try {
-    const response = await fetch(`${API_BASE_URL}/get-migraine-data/${userId}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': DEV_TOKEN, // Use Authorization header (React Native compatible)
-      },
-    });
+    // Simulate API delay
+    await new Promise(resolve => setTimeout(resolve, 500));
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(`API error: ${response.status} ${response.statusText} - ${errorText}`);
-    }
-
-    const data = await response.json();
-
-    if (!data.success) {
-      throw new Error(data.error || 'Failed to fetch migraine data');
-    }
-
-    // Extract percentage from response (already a percentage 0-100)
-    let riskPercentage = 0;
-    let factors: string[] = [];
-
-    if (data.probability !== undefined && data.probability !== null) {
-      // Probability is already a percentage (0-100)
-      riskPercentage = Math.round(data.probability);
-    } else {
-      // No probability available
-      throw new Error(data.error || 'No prediction data available');
-    }
-
+    // Hardcoded response
+    const riskPercentage = 45; // Medium risk
     const riskLevel = getRiskLevelFromPercentage(riskPercentage);
     const message = getMessageFromPercentage(riskPercentage);
-
-    // Extract reason1 and reason2 from API response
-    const reason1 = data.reason1 || null;
-    const reason2 = data.reason2 || null;
 
     return {
       riskLevel,
       riskPercentage,
-      factors,
+      factors: [],
       message,
-      reason1,
-      reason2,
+      reason1: 'Air pressure changes',
+      reason2: 'Irregular sleep schedule',
     };
   } catch (error) {
-    
     // Return default/fallback values on error
     return {
       riskLevel: 'medium',

@@ -79,31 +79,36 @@ export function MigraineCalendar({
     return `${checkYear}-${String(checkMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
   };
 
-  // Fetch report for a specific date
+  // Fetch report for a specific date - hardcoded response
   const fetchReport = async (date: string) => {
     setLoadingReport(true);
     setReportError(null);
     try {
-      const response = await fetch(`${apiBaseUrl}/report-by-date/${userId}?date=${date}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': apiToken,
-        },
-      });
+      // Simulate API delay
+      await new Promise(resolve => setTimeout(resolve, 300));
 
-      if (!response.ok) {
-        throw new Error(`API error: ${response.status}`);
-      }
-
-      const data = await response.json();
+      // Hardcoded response - return sample report data
+      const sampleReport: ReportData = {
+        had_migraine: true,
+        stress: true,
+        oversleep: false,
+        sleep_deprivation: true,
+        exercise: false,
+        fatigue: true,
+        menstrual: false,
+        emotional_distress: false,
+        excessive_noise: false,
+        excessive_smells: false,
+        excessive_alcohol: false,
+        irregular_meals: true,
+        overeating: false,
+        excessive_caffeine: true,
+        excessive_smoking: false,
+        travel: false,
+        created_at: date,
+      };
       
-      if (data.success && data.report) {
-        setReportData(data.report);
-      } else {
-        setReportError(data.error || 'No report found for this date.');
-        setReportData(null);
-      }
+      setReportData(sampleReport);
     } catch (error) {
       setReportError('Failed to load report. Please try again.');
       setReportData(null);
