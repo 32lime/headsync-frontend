@@ -1,5 +1,5 @@
 {
-  "buildCommand": "cd frontend && npm install && npx expo export:web",
+  "buildCommand": "cd frontend && npx expo export:web",
   "outputDirectory": "frontend/dist",
   "devCommand": "cd frontend && npm run web",
   "installCommand": "cd frontend && npm install",
